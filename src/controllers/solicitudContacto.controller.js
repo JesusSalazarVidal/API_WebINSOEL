@@ -8,7 +8,7 @@ export const getSolicitudes = async (req, res) => {
 };
 
 export const createSolicitud = async (req, res) => {
-  console.log(req.body)
+  //console.log(req.body)
   try {
     const { nombre, empresa, correo, telefono, servicio, descripcion } =
       req.body;
@@ -40,7 +40,7 @@ export const createSolicitud = async (req, res) => {
       to: correo,
       subject: "Prueba desde API",
       html: `
-        <p>Hola ${nombre} gracias por tu interes en nuestro servicio de ${servicio} nos pondremos en contacto contigo lo más pronto posible.</p>
+        <p>H ${nombre} gracias por tu interes en nuestro servicio de ${servicio} nos pondremos en contacto contigo lo más pronto posible.</p>
         <br>
         <img src="cid:logoInsoel" alt="Insoel">
         <p>Insoel México</p>

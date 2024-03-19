@@ -11,7 +11,7 @@ import { createAccessToken } from "../libs/jwt.js";
 
 export const register = async (req, res) => {
   const { nombre, correo, password } = req.body;
-  console.log(req.body)
+  //console.log(req.body)
 
   try {
     const userFound = await Usuario.findOne({ correo });
@@ -32,7 +32,7 @@ export const register = async (req, res) => {
     const token = await createAccessToken({ id: userSaved._id });
 
     res.cookie("token", token);
-    res.json({
+    res.status(200).json({
       id: userSaved._id,
       nombre: userSaved.nombre,
       correo: userSaved.correo,

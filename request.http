@@ -59,3 +59,6 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/obtenerProyectos HTTP/1.1
+
+###
+DELETE http://localhost:3000/api/eliminarProyecto/65f49d1074b4ab6163dfe30c HTTP/1.1

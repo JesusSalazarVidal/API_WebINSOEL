@@ -5,6 +5,9 @@ const proyectoSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    area:{
+        type:String
+    },
     imagenes: [{
         nombre: String,
         ruta: String,

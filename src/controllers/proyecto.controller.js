@@ -13,6 +13,7 @@ export const crearProyecto = async (req, res) => {
     // Crear una nueva instancia del modelo Proyecto y guardarla en la base de datos
     const nuevoProyecto = new Proyecto({
       titulo: req.body.titulo,
+      area: req.body.area,
       fecha: req.body.fecha,
       video: {
         nombre: req.files["video"][0].originalname, 
@@ -54,6 +55,26 @@ export const crearProyecto = async (req, res) => {
   }
 };
 
+export const updateProyecto = async (req, res) => {
+  const {id} = req.params
+  const datosActualizados = req.body; // Datos actualizados del proyecto
+
+    // Verificar si el proyecto existe en la base de datos
+    const proyectoExistente = await Proyecto.findById(idProyecto);
+
+    if (!proyectoExistente) {
+      return res.status(404).json({ mensaje: "Proyecto no encontrado" });
+    }
+
+    // Actualizar los campos del proyecto con los nuevos datos
+    Object.keys(datosActualizados).forEach((key) => {
+      proyectoExistente[key] = datosActualizados[key];
+    });
+
+    // Guardar el proyecto actualizado en la base de datos
+    await proyectoExistente.save();
+}
+
 export const getProyectos = async (req, res) => {
   const proyectos = await Proyecto.find();
   res.json(proyectos);
@@ -62,14 +83,14 @@ export const getProyectos = async (req, res) => {
 export const getProyecto = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
+    //console.log(id);
     const proyecto = await Proyecto.findById(id);
 
     if (!proyecto) {
       return res.status(404).json({ mensaje: "Proyecto no encontrado" });
     }
 
-    res.json(proyecto);
+    res.status(200).json(proyecto);
   } catch (error) {
     return res.status(404).json({ mensaje: "Proyecto no encontrado" });
   }

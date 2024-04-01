@@ -15,7 +15,7 @@ export const crearProyecto = async (req, res) => {
       titulo: req.body.titulo,
       fecha: req.body.fecha,
       video: {
-        nombre: req.files["video"][0].originalname,
+        nombre: req.files["video"][0].originalname, 
         ruta: req.files["video"][0].path,
         nuevoNombre: ((req.files["video"][0].path).split("\\"))[((req.files["video"][0].path).split("\\")).length - 1]
       },

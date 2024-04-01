@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import solicitudRoutes from "./routes/solicitudContacto.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import proyectoRoutes from "./routes/proyecto.routes.js";
+import carruselRoutes from "./routes/carrusel.routes.js"
 
 // Obtén la ruta del directorio actual
 const __filename = fileURLToPath(import.meta.url);
@@ -27,7 +28,7 @@ app.use(cookieParser());
 
 // Configurar Express para servir archivos estáticos (en el caso de las imágenes)
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
-
+app.use('/carrusel', express.static(path.join(__dirname, 'public/uploads/carrusel')));
 
 app.use(
   cors({
@@ -39,5 +40,6 @@ app.use(
 app.use("/api", solicitudRoutes);
 app.use("/api", authRoutes);
 app.use("/api", proyectoRoutes);
+app.use("/api", carruselRoutes);
 
 export default app;

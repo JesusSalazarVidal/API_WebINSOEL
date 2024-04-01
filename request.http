@@ -59,3 +59,50 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/obtenerProyectos HTTP/1.1
+
+###
+GET http://localhost:3000/api/obtenerCarruseles HTTP/1.1
+
+###
+GET http://localhost:3000/api/carrusel/65fb13715dd755435973b48a HTTP/1.1
+
+###
+GET http://localhost:3000/api/carrusel/prueba2 HTTP/1.1
+
+###
+DELETE http://localhost:3000/api/eliminarCarrusel/65fdc6f5d78078dc95dcdfbc HTTP/1.1
+
+###
+PUT  http://localhost:3000/api/actualizarCarrusel/65fddc4ed78078dc95dce178 HTTP/1.1
+Content-Type: application/json
+
+    {
+    "titulo": "Ryuk",
+    "imagenes": [
+        {
+            "nombre": "573109.jpg",
+            "ruta": "src\\public\\uploads\\carrusel\\1711135821927.573109.jpg",
+            "nuevoNombre": "1711135821927.573109.jpg",
+            "_id": "65fddc4ed78078dc95dce179"
+        },
+        {
+            "nombre": "1041799.png",
+            "ruta": "src\\public\\uploads\\carrusel\\1711135821929.1041799.png",
+            "nuevoNombre": "1711135821929.1041799.png",
+            "_id": "65fddc4ed78078dc95dce17a"
+        },
+        {
+            "nombre": "i.jpg",
+            "ruta": "src\\public\\uploads\\carrusel\\1711135821957.i.jpg",
+            "nuevoNombre": "1711135821957.i.jpg",
+            "_id": "65fddc4ed78078dc95dce17b"
+        },
+        {
+            "nombre": "u.jpg",
+            "ruta": "src\\public\\uploads\\carrusel\\1711135821992.u.jpg",
+            "nuevoNombre": "1711135821992.u.jpg",
+            "_id": "65fddc4ed78078dc95dce17c"
+        }
+    ]
+}
+

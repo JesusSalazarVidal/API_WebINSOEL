@@ -8,11 +8,11 @@ import path from "path";
 import { fileURLToPath } from 'url';
 
 
-
 import solicitudRoutes from "./routes/solicitudContacto.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import proyectoRoutes from "./routes/proyecto.routes.js";
-import carruselRoutes from "./routes/carrusel.routes.js"
+import carruselRoutes from "./routes/carrusel.routes.js";
+import ubicacacionRoutes from "./routes/ubicacion.routes.js"
 
 // Obtén la ruta del directorio actual
 const __filename = fileURLToPath(import.meta.url);
@@ -41,5 +41,7 @@ app.use("/api", solicitudRoutes);
 app.use("/api", authRoutes);
 app.use("/api", proyectoRoutes);
 app.use("/api", carruselRoutes);
+app.use("/api", ubicacacionRoutes);
+
 
 export default app;

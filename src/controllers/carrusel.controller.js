@@ -136,6 +136,7 @@ const __dirname = path.dirname(__filename);
       // Actualizar los campos del carrusel
       if (titulo) carrusel.titulo = titulo;
       if (imagenes) carrusel.imagenes = imagenes;
+
   
       // Guardar los cambios en la base de datos
       await carrusel.save();

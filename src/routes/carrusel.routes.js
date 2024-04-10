@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
     cb(null, 'src/public/uploads/carrusel');
   },
   filename: function (req, file, cb) {
-    const ext = file.originalname.split().pop();
+    const ext = file.originalname.split('.').pop();
     cb(null, `${Date.now()}.${ext}`);
   }
 });
@@ -43,6 +43,15 @@ router.get("/carrusel/:titulo", getCarruselPorTitulo);
 
 router.get("/carrusel/:id", getCarrusel)
 
-router.put('/actualizarCarrusel/:id', updateCarrusel);
+router.put(
+  '/editarCarrusel/:id',
+  upload.fields([
+    { name: 'img1', maxCount: 1 },
+    { name: 'img2', maxCount: 1 },
+    { name: 'img3', maxCount: 1 },
+    { name: 'img4', maxCount: 1 },
+  ]),
+  updateCarrusel
+);
 
 export default router;

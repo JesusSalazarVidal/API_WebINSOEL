@@ -125,3 +125,11 @@ GET http://localhost:3000/api/obtenerUbicaciones HTTP/1.1
 
 ###
 DELETE http://localhost:3000/api/eliminarUbicacion/660ef7c7dd5f271a6d3f0d89 HTTP/1.1
+
+------------------------------
+
+###
+GET http://localhost:3000/api/obtenerSubMenus HTTP/1.1
+
+###
+DELETE http://localhost:3000/api/eliminarSubMenu/6615a273d02211acf628a33b HTTP/1.1

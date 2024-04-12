@@ -3,6 +3,7 @@ import Proyecto from "../models/proyecto.js";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
+import Image from "../models/image.model.js";
 
 // Obtén la ruta del directorio actual
 const __filename = fileURLToPath(import.meta.url);
@@ -16,26 +17,38 @@ export const crearProyecto = async (req, res) => {
       area: req.body.area,
       fecha: req.body.fecha,
       video: {
-        nombre: req.files["video"][0].originalname, 
+        nombre: req.files["video"][0].originalname,
         ruta: req.files["video"][0].path,
-        nuevoNombre: ((req.files["video"][0].path).split("\\"))[((req.files["video"][0].path).split("\\")).length - 1]
+        nuevoNombre:
+          req.files["video"][0].path.split("\\")[
+            req.files["video"][0].path.split("\\").length - 1
+          ],
       },
       contenido: req.body.contenido,
       imagenes: [
         {
           nombre: req.files["imagen1"][0].originalname,
           ruta: req.files["imagen1"][0].path,
-          nuevoNombre: ((req.files["imagen1"][0].path).split("\\"))[((req.files["imagen1"][0].path).split("\\")).length - 1]
+          nuevoNombre:
+            req.files["imagen1"][0].path.split("\\")[
+              req.files["imagen1"][0].path.split("\\").length - 1
+            ],
         },
         {
           nombre: req.files["imagen2"][0].originalname,
           ruta: req.files["imagen2"][0].path,
-          nuevoNombre: ((req.files["imagen2"][0].path).split("\\"))[((req.files["imagen2"][0].path).split("\\")).length - 1]
+          nuevoNombre:
+            req.files["imagen2"][0].path.split("\\")[
+              req.files["imagen2"][0].path.split("\\").length - 1
+            ],
         },
         {
           nombre: req.files["imagen3"][0].originalname,
           ruta: req.files["imagen3"][0].path,
-          nuevoNombre: ((req.files["imagen3"][0].path).split("\\"))[((req.files["imagen3"][0].path).split("\\")).length - 1]
+          nuevoNombre:
+            req.files["imagen3"][0].path.split("\\")[
+              req.files["imagen3"][0].path.split("\\").length - 1
+            ],
         },
       ],
       frase: req.body.frase,
@@ -43,37 +56,118 @@ export const crearProyecto = async (req, res) => {
 
     await nuevoProyecto.save();
 
-    res
-      .status(200)
-      .json({
-        mensaje: "Informe creado exitosamente",
-        proyecto: nuevoProyecto,
-      });
+    res.status(200).json({
+      mensaje: "Informe creado exitosamente",
+      proyecto: nuevoProyecto,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: "Error al crear el informe" });
   }
 };
 
+//Funcion para eliminar archivos como imagenes y videos 
+const eliminarArchivo = async(ruta) => {
+  const rutaArchivo = path.join(__dirname, "..", "..", ruta);
+      //console.log(rutaImagen)
+      try {
+        await fs.unlink(ruta);
+      } catch (error) {
+        console.error(`Error al eliminar el rachivo  ${ruta}:`, error);
+      }
+
+}
+
 export const updateProyecto = async (req, res) => {
-  const {id} = req.params
-  const datosActualizados = req.body; // Datos actualizados del proyecto
+  try {
+    const proyectoId = req.params.id;
+    const proyectoActualizado = req.body;
 
-    // Verificar si el proyecto existe en la base de datos
-    const proyectoExistente = await Proyecto.findById(idProyecto);
+    // Buscar el proyecto por su ID
+    const proyecto = await Proyecto.findById(proyectoId);
 
-    if (!proyectoExistente) {
+    // Si el proyecto no existe, retornar un error
+    if (!proyecto) {
       return res.status(404).json({ mensaje: "Proyecto no encontrado" });
     }
 
-    // Actualizar los campos del proyecto con los nuevos datos
-    Object.keys(datosActualizados).forEach((key) => {
-      proyectoExistente[key] = datosActualizados[key];
-    });
+    // Actualizar los campos del proyecto con los datos enviados
+    proyecto.titulo = proyectoActualizado.titulo;
+    proyecto.area = proyectoActualizado.area;
+    proyecto.fecha = proyectoActualizado.fecha;
+    proyecto.contenido = proyectoActualizado.contenido;
+    proyecto.frase = proyectoActualizado.frase;
+    proyectoActualizado.video = req.files["video"][0]
+    proyectoActualizado.imagen1 = req.files["imagen1"][0]
+    proyectoActualizado.imagen2 = req.files["imagen2"][0]
+    proyectoActualizado.imagen3 = req.files["imagen3"][0]
 
-    // Guardar el proyecto actualizado en la base de datos
-    await proyectoExistente.save();
-}
+
+    // Actualizar imágenes y videos si se proporcionan
+    if (proyectoActualizado.video) {
+      //Primero eliminamos el archivo existente para remplazarlo por el nuevo 
+      eliminarArchivo(proyecto.video.ruta)
+      proyecto.video = {
+        nombre: proyectoActualizado.video.originalname,
+        ruta: proyectoActualizado.video.path,
+        nuevoNombre:
+          proyectoActualizado.video.path.split("\\")[
+            proyectoActualizado.video.path.split("\\").length - 1
+          ],
+      }
+      console.log(proyecto.video.ruta)
+      //console.log(proyecto.video)
+    } 
+    if (proyectoActualizado.imagen1) {
+      eliminarArchivo(proyecto.imagenes[0].ruta)
+      proyecto.imagenes[0] = {
+        nombre: proyectoActualizado.imagen1.originalname,
+        ruta: proyectoActualizado.imagen1.path,
+        nuevoNombre:
+          proyectoActualizado.imagen1.path.split("\\")[
+            proyectoActualizado.imagen1.path.split("\\").length - 1
+          ],
+      };
+    }
+    if (proyectoActualizado.imagen2) {
+      eliminarArchivo(proyecto.imagenes[1].ruta)
+      proyecto.imagenes[1] = {
+        nombre: proyectoActualizado.imagen2.originalname,
+        ruta: proyectoActualizado.imagen2.path,
+        nuevoNombre:
+          proyectoActualizado.imagen2.path.split("\\")[
+            proyectoActualizado.imagen2.path.split("\\").length - 1
+          ],
+      };
+    }
+    if (proyectoActualizado.imagen3) {
+      eliminarArchivo(proyecto.imagenes[2].ruta)
+      proyecto.imagenes[2] = {
+        nombre: proyectoActualizado.imagen3.originalname,
+        ruta: proyectoActualizado.imagen3.path,
+        nuevoNombre:
+          proyectoActualizado.imagen3.path.split("\\")[
+            proyectoActualizado.imagen3.path.split("\\").length - 1
+          ],
+      };
+    }
+
+    // Guardar los cambios
+    await proyecto.save();
+
+    return res
+      .status(200)
+      .json({
+        mensaje: "Proyecto actualizado correctamente",
+        proyecto: proyecto,
+      });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ mensaje: "Error al actualizar el proyecto", error: error });
+  }
+};
 
 export const getProyectos = async (req, res) => {
   const proyectos = await Proyecto.find();
@@ -140,3 +234,25 @@ export const deleteProyecto = async (req, res) => {
     res.status(500).json({ mensaje: "Error al eliminar el informe" });
   }
 };
+
+export const uploadImage = async(req, res) =>{
+  try {
+    // Obtener los datos de la imagen desde la solicitud
+    console.log(req.file)
+    const imageData = req.file.buffer;
+    const contentType = req.file.mimetype;
+    console.log(imageData)
+
+    // Guardar la imagen en la base de datos
+    const newImage = new Image({
+      name: req.file.originalname,
+      data: imageData,
+      contentType: contentType
+    });
+    await newImage.save();
+    res.send('Imagen cargada con éxito');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cargar la imagen');
+  }
+}

@@ -4,6 +4,8 @@ import {
   getProyectos,
   deleteProyecto,
   getProyecto,
+  updateProyecto,
+  uploadImage,
 } from "../controllers/proyecto.controller.js";
 import multer from "multer";
 import path from "path";
@@ -38,5 +40,17 @@ router.get("/obtenerProyectos", getProyectos);
 router.delete("/eliminarProyecto/:id", deleteProyecto)
 
 router.get("/proyecto/:id", getProyecto)
+router.put(
+  "/actualizarProyecto/:id",
+  upload.fields([
+    { name: "video", maxCount: 1 },
+    { name: "imagen1", maxCount: 1 },
+    { name: "imagen2", maxCount: 1 },
+    { name: "imagen3", maxCount: 1 },
+  ]),
+  updateProyecto
+);
+
+router.post("/upload/", upload.single('image'),uploadImage)
 
 export default router;

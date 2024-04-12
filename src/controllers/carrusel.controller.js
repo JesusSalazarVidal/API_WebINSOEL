@@ -2,6 +2,7 @@ import Carrusel from "../models/carrusel.js"
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs/promises";
+import multer from "multer";
 
 // Obtén la ruta del directorio actual
 const __filename = fileURLToPath(import.meta.url);
@@ -122,28 +123,101 @@ const __dirname = path.dirname(__filename);
     }
   };
 
+  //Funcion para eliminar archivos como imagenes y videos 
+const eliminarArchivo = async(ruta) => {
+  const rutaArchivo = path.join(__dirname, "..", "..", ruta);
+     
+      try {
+        await fs.unlink(ruta);
+      } catch (error) {
+        console.error(`Error al eliminar el rachivo  ${ruta}:`, error);
+      }
+
+}
+
+
   export const updateCarrusel = async (req, res) => {
     try {
-      const { id } = req.params;
-      const { titulo, imagenes } = req.body;
-  
-      // Verificar si el carrusel existe
-      const carrusel = await Carrusel.findById(id);
-      if (!carrusel) {
-        return res.status(404).json({ mensaje: "Carrusel no encontrado" });
-      }
-  
-      // Actualizar los campos del carrusel
-      if (titulo) carrusel.titulo = titulo;
-      if (imagenes) carrusel.imagenes = imagenes;
+      const id = req.params.id;
+      const carruselActualizado = req.body;
 
+      // Buscar por su ID
+    const carrusel = await Carrusel.findById(id);
   
-      // Guardar los cambios en la base de datos
-      await carrusel.save();
-  
-      res.status(200).json({ mensaje: "Carrusel actualizado exitosamente", carrusel });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ mensaje: "Error al actualizar el carrusel" });
+      // Si  no existe, retornar un error
+    if (!carrusel) {
+      return res.status(404).json({ mensaje: "carrusel no encontrado" });
     }
+  
+      // Actualizar los campos  con los datos enviados
+      carrusel.titulo = carruselActualizado.titulo;
+      carruselActualizado.img1 = req.files["img1"][0]
+      carruselActualizado.img2 = req.files["img2"][0]
+      carruselActualizado.img3 = req.files["img3"][0]
+      carruselActualizado.img4 = req.files["img4"][0]
+      
+      // Verificar si se proporcionaron nuevas imágenes
+if (carruselActualizado.img1 || carruselActualizado.img2 || carruselActualizado.img3 || carruselActualizado.img4) {
+     // Actualizar las imágenes solo si se proporcionan nuevas imágenes
+    if (carruselActualizado.img1) {
+      eliminarArchivo(carrusel.imagenes[0].ruta)
+      carrusel.imagenes[0] = {
+        nombre: carruselActualizado.img1.originalname,
+        ruta: carruselActualizado.img1.path,
+        nuevoNombre:
+          carruselActualizado.img1.path.split("\\")[
+            carruselActualizado.img1.path.split("\\").length - 1
+          ],
+      };
+    }
+    if (carruselActualizado.img2) {
+      eliminarArchivo(carrusel.imagenes[1].ruta)
+      carrusel.imagenes[1] = {
+        nombre: carruselActualizado.img2.originalname,
+        ruta: carruselActualizado.img2.path,
+        nuevoNombre:
+          carruselActualizado.img2.path.split("\\")[
+            carruselActualizado.img2.path.split("\\").length - 1
+          ],
+      };
+    }
+    if (carruselActualizado.img3) {
+      eliminarArchivo(carrusel.imagenes[2].ruta)
+      carrusel.imagenes[2] = {
+        nombre: carruselActualizado.img3.originalname,
+        ruta: carruselActualizado.img3.path,
+        nuevoNombre:
+          carruselActualizado.img3.path.split("\\")[
+            carruselActualizado.img3.path.split("\\").length - 1
+          ],
+      };
+    }
+    if (carruselActualizado.img4) {
+      eliminarArchivo(carrusel.imagenes[3].ruta)
+      carrusel.imagenes[3] = {
+        nombre: carruselActualizado.img4.originalname,
+        ruta: carruselActualizado.img4.path,
+        nuevoNombre:
+          carruselActualizado.img4.path.split("\\")[
+            carruselActualizado.img4.path.split("\\").length - 1
+          ],
+      };
+    }
+  }
+
+    // Guardar los cambios
+    await carrusel.save();
+
+    return res
+      .status(200)
+      .json({
+        mensaje: "Carrusel actualizado correctamente",
+        carrusel: carrusel,
+      });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ mensaje: "Error al actualizar el carrusel", error: error });
+  }
   };

@@ -9,49 +9,43 @@ import Image from "../models/image.model.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+ // Función para manejar archivos
+ const procesarArchivo = (req, campo) => {
+  const file = req.files[campo];
+  if (!file || !file[0]) {
+    throw new Error(`El archivo ${campo} no se ha proporcionado`);
+  }
+  console.log(`desc_${campo.charAt(campo.length - 1)}`)
+  return {
+    nombre: file[0].originalname,
+    ruta: file[0].path,
+    nuevoNombre: file[0].path.split("\\").pop(),
+    descripcion: req.body[`desc_Img${campo.charAt(campo.length - 1)}`],
+  
+  };
+};
+
 export const crearProyecto = async (req, res) => {
   try {
+    // Validar la entrada del usuario
+    const { titulo, area, fecha, contenido, frase } = req.body;
+    if (!titulo || !area || !fecha || !contenido || !frase) {
+      return res.status(400).json({ mensaje: "Faltan campos obligatorios" });
+    }
+
     // Crear una nueva instancia del modelo Proyecto y guardarla en la base de datos
     const nuevoProyecto = new Proyecto({
-      titulo: req.body.titulo,
-      area: req.body.area,
-      fecha: req.body.fecha,
-      video: {
-        nombre: req.files["video"][0].originalname,
-        ruta: req.files["video"][0].path,
-        nuevoNombre:
-          req.files["video"][0].path.split("\\")[
-            req.files["video"][0].path.split("\\").length - 1
-          ],
-      },
-      contenido: req.body.contenido,
+      titulo,
+      area,
+      fecha,
+      video: procesarArchivo(req, "video"),
+      contenido,
       imagenes: [
-        {
-          nombre: req.files["imagen1"][0].originalname,
-          ruta: req.files["imagen1"][0].path,
-          nuevoNombre:
-            req.files["imagen1"][0].path.split("\\")[
-              req.files["imagen1"][0].path.split("\\").length - 1
-            ],
-        },
-        {
-          nombre: req.files["imagen2"][0].originalname,
-          ruta: req.files["imagen2"][0].path,
-          nuevoNombre:
-            req.files["imagen2"][0].path.split("\\")[
-              req.files["imagen2"][0].path.split("\\").length - 1
-            ],
-        },
-        {
-          nombre: req.files["imagen3"][0].originalname,
-          ruta: req.files["imagen3"][0].path,
-          nuevoNombre:
-            req.files["imagen3"][0].path.split("\\")[
-              req.files["imagen3"][0].path.split("\\").length - 1
-            ],
-        },
+        procesarArchivo(req, "imagen1"),
+        procesarArchivo(req, "imagen2"),
+        procesarArchivo(req, "imagen3"),
       ],
-      frase: req.body.frase,
+      frase,
     });
 
     await nuevoProyecto.save();
@@ -115,7 +109,7 @@ export const updateProyecto = async (req, res) => {
             proyectoActualizado.video.path.split("\\").length - 1
           ],
       }
-      console.log(proyecto.video.ruta)
+      //console.log(proyecto.video.ruta)
       //console.log(proyecto.video)
     } 
     if (proyectoActualizado.imagen1) {
@@ -127,6 +121,7 @@ export const updateProyecto = async (req, res) => {
           proyectoActualizado.imagen1.path.split("\\")[
             proyectoActualizado.imagen1.path.split("\\").length - 1
           ],
+          descripcion: req.body.desc_Img1
       };
     }
     if (proyectoActualizado.imagen2) {
@@ -138,6 +133,7 @@ export const updateProyecto = async (req, res) => {
           proyectoActualizado.imagen2.path.split("\\")[
             proyectoActualizado.imagen2.path.split("\\").length - 1
           ],
+          descripcion: req.body.desc_Img2
       };
     }
     if (proyectoActualizado.imagen3) {
@@ -149,6 +145,7 @@ export const updateProyecto = async (req, res) => {
           proyectoActualizado.imagen3.path.split("\\")[
             proyectoActualizado.imagen3.path.split("\\").length - 1
           ],
+          descripcion: req.body.desc_Img3
       };
     }
 

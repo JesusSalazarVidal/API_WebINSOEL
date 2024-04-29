@@ -12,6 +12,7 @@ const proyectoSchema = mongoose.Schema({
         nombre: String,
         ruta: String,
         nuevoNombre: String,
+        descripcion: String,
     }],
     fecha: {
         type: Date,

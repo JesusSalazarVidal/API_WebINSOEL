@@ -46,10 +46,10 @@ router.get("/carrusel/:id", getCarrusel)
 router.put(
   '/editarCarrusel/:id',
   upload.fields([
-    { name: 'img1', maxCount: 1 },
-    { name: 'img2', maxCount: 1 },
-    { name: 'img3', maxCount: 1 },
-    { name: 'img4', maxCount: 1 },
+    { name: 'imagen1', maxCount: 1 },
+    { name: 'imagen2', maxCount: 1 },
+    { name: 'imagen3', maxCount: 1 },
+    { name: 'imagen4', maxCount: 1 },
   ]),
   updateCarrusel
 );

@@ -34,6 +34,61 @@ export const crearSubMenu = async (req, res) => {
     }
 };
 
+export const updateSubMenu = async (req, res) => {
+  try {
+    const submenuId = req.params.id;
+    const subMenuActualizado = req.body;
+
+    // Buscar el submenu por su ID
+    const subMenu = await SubMenu.findById(submenuId);
+
+    // Si el subMenu no existe, retornar un error
+    if (!subMenu) {
+      return res.status(404).json({ mensaje: "SubMenu no encontrado" });
+    }
+
+    // Actualizar los campos del proyecto con los datos enviados
+    subMenu.area = subMenuActualizado.area;
+    subMenu.enlace = subMenuActualizado.enlace;
+    subMenu.descripcion = subMenuActualizado.descripcion;
+    subMenuActualizado.img = req.files["img"][0];
+    
+
+
+    if (subMenuActualizado.img) {
+      // Eliminar el archivo existente si es necesario
+      if (subMenu.img) {
+          eliminarArchivo(subMenu.img.ruta);
+      }
+  
+      // Actualizar la información de la nueva imagen
+      const nuevaImagen = {
+          nombre: subMenuActualizado.img.originalname,
+          ruta: subMenuActualizado.img.path,
+          nuevoNombre: subMenuActualizado.img.path.split("\\").pop()
+      };
+  
+      // Asignar la nueva imagen al submenú
+      subMenu.img = nuevaImagen;
+  }
+
+    // Guardar los cambios
+    await subMenu.save();
+
+    return res
+      .status(200)
+      .json({
+        mensaje: "SubMenu actualizado correctamente",
+        submenu: subMenu,
+      });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ mensaje: "Error al actualizar el carrusel", error: error });
+  }
+};
+
 export const getSubMenu = async (req, res) => {
     const subMenu = await SubMenu.find();
     res.json(subMenu);
@@ -87,30 +142,14 @@ try {
     }
   };
 
-  export const updateSubMenu = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { area, enlace, img, descripcion } = req.body;
-  
-      // Verificar si el submenu existe
-      const submenu = await SubMenu.findById(id);
-      if (!submenu) {
-        return res.status(404).json({ mensaje: "SubMenu no encontrado" });
+  //Funcion para eliminar archivos como imagenes y videos 
+const eliminarArchivo = async(ruta) => {
+  const rutaArchivo = path.join(__dirname, "..", "..", ruta);
+    
+      try {
+        await fs.unlink(ruta);
+      } catch (error) {
+        console.error(`Error al eliminar el rachivo  ${ruta}:`, error);
       }
-  
-      // Actualizar los campos
-      if (area) submenu.area = area;
-      if (enlace) submenu.enlace = enlace;
-      if (img) submenu.img = img;
-      if (descripcion) submenu.descripcion = descripcion;
 
-  
-      // Guardar los cambios en la base de datos
-      await submenu.save();
-  
-      res.status(200).json({ mensaje: "SubMENU actualizado exitosamente", submenu });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ mensaje: "Error al actualizar el submenu" });
-    }
-  };
+}

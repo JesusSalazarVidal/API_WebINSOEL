@@ -14,6 +14,7 @@ import proyectoRoutes from "./routes/proyecto.routes.js";
 import carruselRoutes from "./routes/carrusel.routes.js";
 import ubicacacionRoutes from "./routes/ubicacion.routes.js"
 import subMenuRoutes from "./routes/subMenu.routes.js"
+import areaRoutes from './routes/area.routes.js'
 
 // Obtén la ruta del directorio actual
 const __filename = fileURLToPath(import.meta.url);
@@ -45,6 +46,7 @@ app.use("/api", proyectoRoutes);
 app.use("/api", carruselRoutes);
 app.use("/api", ubicacacionRoutes);
 app.use("/api", subMenuRoutes);
+app.use("/api", areaRoutes)
 
 
 export default app;

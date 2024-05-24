@@ -41,7 +41,7 @@ res.status(200).json({ mensaje: "Informe eliminado exitosamente" });
   };
 
   export const updateUbicacion = async (req, res) => {
-    console.log(req.params.id);
+    //console.log(req.params.id);
     try {
       const { nombre, direccion, latitud, longitud } = req.body;
       const ubicacionUpdate = await Ubicacion.findOneAndUpdate(

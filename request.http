@@ -133,3 +133,14 @@ GET http://localhost:3000/api/obtenerSubMenus HTTP/1.1
 
 ###
 DELETE http://localhost:3000/api/eliminarSubMenu/6615a273d02211acf628a33b HTTP/1.1
+
+###
+POST http://localhost:3000/api/crear HTTP/1.1
+Content-Type: application/json
+
+{
+    "nombre": "instituto lllll",
+    "direccion": "Colonia niños heroes, C.M, C.P.38780",
+    "latitud": 4332.878,
+    "longitud": 422.4234
+} 

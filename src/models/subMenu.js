@@ -1,23 +1,38 @@
 import mongoose from "mongoose";
 
 const submenuSchema = mongoose.Schema ({
-    area: {
-        type: String,
-        required: true
+    area1: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Area',
     },
-    enlace: { 
-        type: String,
-        required: true
+    area2: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Area',
     },
-    img: {
-        nombre: String,
-        ruta: String,
-        nuevoNombre: String,
+    area3: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Area',
     },
-    descripcion: {
-        type: String,
-        required: true
+    area4: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Area',
     },
+    enlace1: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Proyecto',
+    },
+    enlace2: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Proyecto',
+    },
+    enlace3: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Proyecto',
+    },
+    enlace4: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Proyecto',
+    }
 })
 
 const SubMenu = mongoose.model('SubMenu', submenuSchema);

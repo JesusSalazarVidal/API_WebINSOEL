@@ -2,9 +2,9 @@ import { Router } from "express";
 import {
   crearSubMenu,
   getSubMenu,
-  getSubMe,
   deleteSubMenu,
   updateSubMenu,
+  obtenerSubMenuRef,
 } from "../controllers/subMenu.controller.js";
 
 import multer from "multer";
@@ -24,22 +24,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post(
-  "/crearSubMenu",
-  upload.fields([{ name: "img", maxCount: 1 }]),
-  crearSubMenu
-);
+router.post("/crearSubMenu", crearSubMenu);
 
 router.get("/obtenerSubMenus", getSubMenu);
 
 router.delete("/eliminarSubMenu/:id", deleteSubMenu);
 
-router.get("/submenu/:id", getSubMe);
+router.put("/editarSubMenu/:id", updateSubMenu);
 
-router.put(
-  "/editarSubMenu/:id",
-  upload.fields([{ name: "img", maxCount: 1 }]),
-  updateSubMenu
-);
+router.get("/referenciasSubMenu/:id", obtenerSubMenuRef)
 
 export default router;

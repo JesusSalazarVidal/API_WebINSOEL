@@ -54,87 +54,68 @@ const __dirname = path.dirname(__filename);
 
   export const updateCarrusel = async (req, res) => {
     try {
-      const carruselId = req.params.id;
-      const carruselActualizado = req.body;
-  
-      // Buscar el carrusel por su ID
-      const carrusel = await Carrusel.findById(carruselId);
-  
-      // Si el carrusel no existe, retornar un error
-      if (!carrusel) {
-        return res.status(404).json({ mensaje: "Carrusel no encontrado" });
-      }
-  
-      // Actualizar los campos del proyecto con los datos enviados
-      carrusel.titulo = carruselActualizado.titulo;
-      carruselActualizado.imagen1 = req.files["imagen1"][0]
-      carruselActualizado.imagen2 = req.files["imagen2"][0]
-      carruselActualizado.imagen3 = req.files["imagen3"][0]
-      carruselActualizado.imagen4 = req.files["imagen4"][0]
-  
-  
-      // Actualizar imágenes y videos si se proporcionan
-      if (carruselActualizado.imagen1) {
-        eliminarArchivo(carrusel.imagenes[0].ruta)
-        carrusel.imagenes[0] = {
-          nombre: carruselActualizado.imagen1.originalname,
-          ruta: carruselActualizado.imagen1.path,
-          nuevoNombre:
-            carruselActualizado.imagen1.path.split("\\")[
-              carruselActualizado.imagen1.path.split("\\").length - 1
-            ],
-        };
-      }
-      if (carruselActualizado.imagen2) {
-        eliminarArchivo(carrusel.imagenes[1].ruta)
-        carrusel.imagenes[1] = {
-          nombre: carruselActualizado.imagen2.originalname,
-          ruta: carruselActualizado.imagen2.path,
-          nuevoNombre:
-            carruselActualizado.imagen2.path.split("\\")[
-              carruselActualizado.imagen2.path.split("\\").length - 1
-            ],
-        };
-      }
-      if (carruselActualizado.imagen3) {
-        eliminarArchivo(carrusel.imagenes[2].ruta)
-        carrusel.imagenes[2] = {
-          nombre: carruselActualizado.imagen3.originalname,
-          ruta: carruselActualizado.imagen3.path,
-          nuevoNombre:
-            carruselActualizado.imagen3.path.split("\\")[
-              carruselActualizado.imagen3.path.split("\\").length - 1
-            ],
-        };
-      }
-      if (carruselActualizado.imagen4) {
-        eliminarArchivo(carrusel.imagenes[3].ruta)
-        carrusel.imagenes[3] = {
-          nombre: carruselActualizado.imagen4.originalname,
-          ruta: carruselActualizado.imagen4.path,
-          nuevoNombre:
-            carruselActualizado.imagen4.path.split("\\")[
-              carruselActualizado.imagen4.path.split("\\").length - 1
-            ],
-        };
-      }
-  
-      // Guardar los cambios
-      await carrusel.save();
-  
-      return res
-        .status(200)
-        .json({
-          mensaje: "Carrusel actualizado correctamente",
-          carrusel: carrusel,
+        const carruselId = req.params.id;
+        const carruselActualizado = req.body;
+
+        // Buscar el carrusel por su ID
+        const carrusel = await Carrusel.findById(carruselId);
+
+        // Si el carrusel no existe, retornar un error
+        if (!carrusel) {
+            return res.status(404).json({ mensaje: "Carrusel no encontrado" });
+        }
+
+        // Actualizar los campos del proyecto con los datos enviados
+        carrusel.titulo = carruselActualizado.titulo;
+
+        // Actualizar imágenes si se proporcionan
+        if (req.files && req.files["imagen1"] && req.files["imagen1"][0]) {
+            eliminarArchivo(carrusel.imagenes[0].ruta);
+            carrusel.imagenes[0] = {
+                nombre: req.files["imagen1"][0].originalname,
+                ruta: req.files["imagen1"][0].path,
+                nuevoNombre: req.files["imagen1"][0].path.split("\\").pop(),
+            };
+        }
+        if (req.files && req.files["imagen2"] && req.files["imagen2"][0]) {
+            eliminarArchivo(carrusel.imagenes[1].ruta);
+            carrusel.imagenes[1] = {
+                nombre: req.files["imagen2"][0].originalname,
+                ruta: req.files["imagen2"][0].path,
+                nuevoNombre: req.files["imagen2"][0].path.split("\\").pop(),
+            };
+        }
+        if (req.files && req.files["imagen3"] && req.files["imagen3"][0]) {
+            eliminarArchivo(carrusel.imagenes[2].ruta);
+            carrusel.imagenes[2] = {
+                nombre: req.files["imagen3"][0].originalname,
+                ruta: req.files["imagen3"][0].path,
+                nuevoNombre: req.files["imagen3"][0].path.split("\\").pop(),
+            };
+        }
+        if (req.files && req.files["imagen4"] && req.files["imagen4"][0]) {
+            eliminarArchivo(carrusel.imagenes[3].ruta);
+            carrusel.imagenes[3] = {
+                nombre: req.files["imagen4"][0].originalname,
+                ruta: req.files["imagen4"][0].path,
+                nuevoNombre: req.files["imagen4"][0].path.split("\\").pop(),
+            };
+        }
+
+        // Guardar los cambios
+        await carrusel.save();
+
+        return res.status(200).json({
+            mensaje: "Carrusel actualizado correctamente",
+            carrusel: carrusel,
         });
     } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .json({ mensaje: "Error al actualizar el carrusel", error: error });
+        console.error(error);
+        return res.status(500).json({ mensaje: "Error al actualizar el carrusel", error: error });
     }
-  };
+};
+
+
 
   export const getCarruseles = async (req, res) => {
     const carruseles = await Carrusel.find();
@@ -217,6 +198,7 @@ const eliminarArchivo = async(ruta) => {
       }
 
 }
+
 
 
 

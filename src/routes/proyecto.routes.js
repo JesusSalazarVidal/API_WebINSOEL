@@ -6,6 +6,7 @@ import {
   getProyecto,
   updateProyecto,
   uploadImage,
+  buscarProyectosPorArea,
 } from "../controllers/proyecto.controller.js";
 import multer from "multer";
 import path from "path";
@@ -40,6 +41,9 @@ router.get("/obtenerProyectos", getProyectos);
 router.delete("/eliminarProyecto/:id", deleteProyecto)
 
 router.get("/proyecto/:id", getProyecto)
+
+router.get("/proyectosByArea/:area", buscarProyectosPorArea)
+
 router.put(
   "/actualizarProyecto/:id",
   upload.fields([

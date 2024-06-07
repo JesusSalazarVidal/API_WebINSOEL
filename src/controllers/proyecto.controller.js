@@ -187,6 +187,22 @@ export const getProyecto = async (req, res) => {
   }
 };
 
+// Función para buscar proyectos por área
+export const buscarProyectosPorArea = async (req, res) => {
+  try {
+    const { area } = req.params;
+    console.log(area)
+    const proyectos = await Proyecto.find({ area });
+    if (proyectos.length === 0) {
+      return res.status(404).json({ mensaje: "No se encontraron proyectos para el área especificada" });
+    }
+    res.status(200).json(proyectos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al buscar proyectos por área" });
+  }
+};
+
 export const deleteProyecto = async (req, res) => {
   try {
     const idProyecto = req.params.id;

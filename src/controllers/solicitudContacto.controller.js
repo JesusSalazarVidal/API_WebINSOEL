@@ -29,21 +29,20 @@ export const createSolicitud = async (req, res) => {
       host: "smtp.gmail.com",
       port: 587,
       auth: {
-        user: "jesus.salazar.v35@gmail.com",
-        pass: "tbfd knft lxax xejs",
+        user: "insoel.ventas@gmail.com",//Usuario es el correo del cual se enviara el correo
+        pass: "qwkh gatf tfsd vsnq",//El pass se genero desde la cuneta de google por medio de contraseña de aplicaciones esta correponde a WebInsoel
       },
     });
 
     // Configurar el mensaje de correo
     const mailOptions = {
-      from: "jesus.salazar.v35@gmail.com",
+      from: "insoel.ventas@gmail.com",
       to: correo,
-      subject: "Prueba desde API",
+      subject: "Prueba correo",
       html: `
-        <p>H ${nombre} gracias por tu interes en nuestro servicio de ${servicio} nos pondremos en contacto contigo lo más pronto posible.</p>
+        <p>Buenos dias ${nombre} gracias por tu interes en nuestro servicio de ${servicio} nos pondremos en contacto contigo lo más pronto posible.</p>
         <br>
-        <img src="cid:logoInsoel" alt="Insoel">
-        <p>Insoel México</p>
+        <p>Mensaje envidado desde nodemailer </p>
       `,
       attachments: [
         {

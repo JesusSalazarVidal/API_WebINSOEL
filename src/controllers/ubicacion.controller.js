@@ -41,6 +41,8 @@ res.status(200).json({ mensaje: "Informe eliminado exitosamente" });
   };
 
   export const updateUbicacion = async (req, res) => {
+    console.log('ID:', req.params.id);
+    console.log('Datos:', req.body);
     //console.log(req.params.id);
     try {
       const { nombre, direccion, latitud, longitud } = req.body;
@@ -49,6 +51,10 @@ res.status(200).json({ mensaje: "Informe eliminado exitosamente" });
         { nombre, direccion, latitud, longitud },
         { new: true }
       );
+      if (!ubicacionUpdate) {
+        return res.status(404).json({ error: 'Ubicación no encontrada' });
+    }
+    res.json(ubicacionUpdate);
     
     } catch (error) {
       // Maneja cualquier error potencial aquí y envía una respuesta apropiada.

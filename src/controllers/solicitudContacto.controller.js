@@ -1,6 +1,6 @@
 import solicitudContacto from "../models/solicitudContacto.model.js";
 
-import nodemailer from "nodemailer";
+import nodemailer from "nodemailer"; 
 
 export const getSolicitudes = async (req, res) => {
   const solicitudes = await solicitudContacto.find();

@@ -14,7 +14,7 @@ const solicitudContactoSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  telefono: {
+  telefono: { 
     type: Number,
     required: true,
   },
@@ -25,6 +25,10 @@ const solicitudContactoSchema = mongoose.Schema({
   descripcion: {
     type: String,
     required: true,
+  },
+  fecha: {
+    type: Date,
+    default: Date.now, // Establece automáticamente la fecha y hora actual
   },
 });
 

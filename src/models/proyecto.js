@@ -6,7 +6,8 @@ const proyectoSchema = mongoose.Schema({
         required: true,
     },
     area:{
-        type:String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Area',
     },
     imagenes: [{
         nombre: String,

@@ -64,3 +64,16 @@ export const createSolicitud = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al enviar el correo' });
   }
 };
+
+// Actualizar el estado de una solicitud
+export const updateSolicitud = async (req, res) => {
+  const { id } = req.params;
+  const { terminada } = req.body;
+  try {
+    const solicitud = await solicitudContacto.findByIdAndUpdate(id, { terminada }, { new: true });
+    res.json(solicitud);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al actualizar la solicitud' });
+  }
+}

@@ -30,6 +30,10 @@ const solicitudContactoSchema = mongoose.Schema({
     type: Date,
     default: Date.now, // Establece automáticamente la fecha y hora actual
   },
+  terminada: { 
+    type: Boolean, 
+    default: false 
+  } // Agregar campo para indicar si está terminada
 });
 
 const SolicitudContacto = mongoose.model("SolicitudContacto", solicitudContactoSchema);

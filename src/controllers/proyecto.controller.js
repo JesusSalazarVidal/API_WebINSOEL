@@ -86,66 +86,68 @@ export const updateProyecto = async (req, res) => {
     }
 
     // Actualizar los campos del proyecto con los datos enviados
-    proyecto.titulo = proyectoActualizado.titulo;
-    proyecto.area = proyectoActualizado.area;
-    proyecto.fecha = proyectoActualizado.fecha;
-    proyecto.contenido = proyectoActualizado.contenido;
-    proyecto.frase = proyectoActualizado.frase;
-    proyectoActualizado.video = req.files["video"][0]
-    proyectoActualizado.imagen1 = req.files["imagen1"][0]
-    proyectoActualizado.imagen2 = req.files["imagen2"][0]
-    proyectoActualizado.imagen3 = req.files["imagen3"][0]
-
+    if (proyectoActualizado.titulo) {
+      proyecto.titulo = proyectoActualizado.titulo;
+    }
+    if (proyectoActualizado.area) {
+      proyecto.area = proyectoActualizado.area;
+    }
+    if (proyectoActualizado.fecha) {
+      proyecto.fecha = proyectoActualizado.fecha;
+    }
+    if (proyectoActualizado.contenido) {
+      proyecto.contenido = proyectoActualizado.contenido;
+    }
+    if (proyectoActualizado.frase) {
+      proyecto.frase = proyectoActualizado.frase;
+    }
 
     // Actualizar imágenes y videos si se proporcionan
-    if (proyectoActualizado.video) {
-      //Primero eliminamos el archivo existente para remplazarlo por el nuevo 
-      eliminarArchivo(proyecto.video.ruta)
+    if (req.files && req.files["video"] && req.files["video"][0]) {
+      eliminarArchivo(proyecto.video.ruta);
       proyecto.video = {
-        nombre: proyectoActualizado.video.originalname,
-        ruta: proyectoActualizado.video.path,
+        nombre: req.files["video"][0].originalname,
+        ruta: req.files["video"][0].path,
         nuevoNombre:
-          proyectoActualizado.video.path.split("\\")[
-            proyectoActualizado.video.path.split("\\").length - 1
+          req.files["video"][0].path.split("\\")[
+            req.files["video"][0].path.split("\\").length - 1
           ],
-      }
-      //console.log(proyecto.video.ruta)
-      //console.log(proyecto.video)
-    } 
-    if (proyectoActualizado.imagen1) {
-      eliminarArchivo(proyecto.imagenes[0].ruta)
+      };
+    }
+    if (req.files && req.files["imagen1"] && req.files["imagen1"][0]) {
+      eliminarArchivo(proyecto.imagenes[0].ruta);
       proyecto.imagenes[0] = {
-        nombre: proyectoActualizado.imagen1.originalname,
-        ruta: proyectoActualizado.imagen1.path,
+        nombre: req.files["imagen1"][0].originalname,
+        ruta: req.files["imagen1"][0].path,
         nuevoNombre:
-          proyectoActualizado.imagen1.path.split("\\")[
-            proyectoActualizado.imagen1.path.split("\\").length - 1
+          req.files["imagen1"][0].path.split("\\")[
+            req.files["imagen1"][0].path.split("\\").length - 1
           ],
-          descripcion: req.body.desc_Img1
+        descripcion: req.body.desc_Img1
       };
     }
-    if (proyectoActualizado.imagen2) {
-      eliminarArchivo(proyecto.imagenes[1].ruta)
+    if (req.files && req.files["imagen2"] && req.files["imagen2"][0]) {
+      eliminarArchivo(proyecto.imagenes[1].ruta);
       proyecto.imagenes[1] = {
-        nombre: proyectoActualizado.imagen2.originalname,
-        ruta: proyectoActualizado.imagen2.path,
+        nombre: req.files["imagen2"][0].originalname,
+        ruta: req.files["imagen2"][0].path,
         nuevoNombre:
-          proyectoActualizado.imagen2.path.split("\\")[
-            proyectoActualizado.imagen2.path.split("\\").length - 1
+          req.files["imagen2"][0].path.split("\\")[
+            req.files["imagen2"][0].path.split("\\").length - 1
           ],
-          descripcion: req.body.desc_Img2
+        descripcion: req.body.desc_Img2
       };
     }
-    if (proyectoActualizado.imagen3) {
-      eliminarArchivo(proyecto.imagenes[2].ruta)
+    if (req.files && req.files["imagen3"] && req.files["imagen3"][0]) {
+      eliminarArchivo(proyecto.imagenes[2].ruta);
       proyecto.imagenes[2] = {
-        nombre: proyectoActualizado.imagen3.originalname,
-        ruta: proyectoActualizado.imagen3.path,
+        nombre: req.files["imagen3"][0].originalname,
+        ruta: req.files["imagen3"][0].path,
         nuevoNombre:
-          proyectoActualizado.imagen3.path.split("\\")[
-            proyectoActualizado.imagen3.path.split("\\").length - 1
+          req.files["imagen3"][0].path.split("\\")[
+            req.files["imagen3"][0].path.split("\\").length - 1
           ],
-          descripcion: req.body.desc_Img3
+        descripcion: req.body.desc_Img3
       };
     }
 
@@ -166,8 +168,9 @@ export const updateProyecto = async (req, res) => {
   }
 };
 
+
 export const getProyectos = async (req, res) => {
-  const proyectos = await Proyecto.find();
+  const proyectos = await Proyecto.find().populate("area");
   res.json(proyectos);
 };
 

@@ -130,7 +130,7 @@ export const obtenerSubMenuRef = async (req, res) => {
   try {
     // Obtener un documento de SubMenu por su ID y rellenar los campos de referencia con los datos completos de las áreas y proyectos
     const subMenu = await SubMenu.findById(req.params.id).populate(
-      "area1 area2 area3 area4"
+      "area1 area2 area3 area4 enlace1 enlace2 enlace3 enlace4"
     );
 
     // Enviar una respuesta con el submenu y sus referencias pobladas

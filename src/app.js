@@ -15,6 +15,7 @@ import carruselRoutes from "./routes/carrusel.routes.js";
 import ubicacacionRoutes from "./routes/ubicacion.routes.js"
 import subMenuRoutes from "./routes/subMenu.routes.js"
 import areaRoutes from './routes/area.routes.js'
+import productoRoutes from './routes/producto.routes.js'
 
 // Obtén la ruta del directorio actual
 const __filename = fileURLToPath(import.meta.url);
@@ -32,6 +33,7 @@ app.use(cookieParser());
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/carrusel', express.static(path.join(__dirname, 'public/uploads/carrusel')));
 app.use('/SubMenu', express.static(path.join(__dirname, 'public/uploads/SubMenu')));
+app.use('/producto', express.static(path.join(__dirname, 'public/uploads/Productos')));
 
 app.use(
   cors({
@@ -47,6 +49,7 @@ app.use("/api", carruselRoutes);
 app.use("/api", ubicacacionRoutes);
 app.use("/api", subMenuRoutes);
 app.use("/api", areaRoutes)
+app.use("/api", productoRoutes)
 
 
 export default app;
